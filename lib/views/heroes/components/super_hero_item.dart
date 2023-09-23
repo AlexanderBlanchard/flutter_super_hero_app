@@ -44,9 +44,9 @@ class SuperheroItem extends StatelessWidget {
           child: Column(
             children: [
               Flexible(
-                flex: 6, // Podrías ajustar este valor según tu necesidad
+                flex: 7,
                 child: AspectRatio(
-                  aspectRatio: 16 / 9, // Relación de aspecto común
+                  aspectRatio: 16 / 9,
                   child: Image.network(
                     hero.images.md,
                     fit: BoxFit.cover,
@@ -54,20 +54,16 @@ class SuperheroItem extends StatelessWidget {
                 ),
               ),
               Flexible(
-                flex: 4,
+                flex: 3,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        hero.name,
-                        style: const TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
-                        maxLines: 1,
-                      ),
-                    ],
+                  child: Center(
+                    child: Text(
+                      hero.name,
+                      style: const TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                    ),
                   ),
                 ),
               ),
