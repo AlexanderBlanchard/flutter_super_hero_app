@@ -31,7 +31,7 @@ class SuperheroItem extends StatelessWidget {
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(7.5),
+            borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
@@ -43,27 +43,38 @@ class SuperheroItem extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Flexible(
-                flex: 7,
+              Expanded(
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Image.network(
                     hero.images.md,
                     fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  (loadingProgress.expectedTotalBytes!)
+                              : null,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
-              Flexible(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Center(
-                    child: Text(
-                      hero.name,
-                      style: const TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
-                      maxLines: 1,
-                    ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                  child: Text(
+                    hero.name,
+                    style: const TextStyle(
+                        fontSize: 18.0, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),

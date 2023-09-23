@@ -1,6 +1,7 @@
 import 'package:app_superheroes/models/superhero.dart';
 import 'package:app_superheroes/views/heroes/components/details_tab_info.dart';
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class SuperHeroDetail extends StatefulWidget {
   final SuperHero hero;
@@ -14,6 +15,9 @@ class _SuperHeroDetailState extends State<SuperHeroDetail> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    TextStyle tabStyle =
+        screenWidth < 350 ? TextStyle(fontSize: 16) : TextStyle(fontSize: 10);
 
     return Scaffold(
       body: DefaultTabController(
@@ -43,17 +47,32 @@ class _SuperHeroDetailState extends State<SuperHeroDetail> {
                 child: Container(
                   height: screenHeight * 0.45,
                   padding: EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
                   child: Hero(
                     tag: 'hero-${widget.hero.slug}',
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.network(
-                        widget.hero.images.lg,
-                        fit: BoxFit.cover,
-                      ),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: FadeInImage.memoryNetwork(
+                                placeholder: kTransparentImage,
+                                image: widget.hero.images.lg,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -61,11 +80,11 @@ class _SuperHeroDetailState extends State<SuperHeroDetail> {
             ),
             TabBar(
               tabs: [
-                Tab(text: 'Estadísticas'),
-                Tab(text: 'Apariencia'),
-                Tab(text: 'Biografía'),
-                Tab(text: 'Trabajo'),
-                Tab(text: 'Conexiones'),
+                Tab(icon: Icon(Icons.bar_chart)), // Estadísticas
+                Tab(icon: Icon(Icons.person)), // Apariencia
+                Tab(icon: Icon(Icons.description)), // Biografía
+                Tab(icon: Icon(Icons.work)), // Trabajo
+                Tab(icon: Icon(Icons.people)), // Conexiones
               ],
             ),
             Expanded(

@@ -5,10 +5,14 @@ import 'package:flutter/material.dart';
 
 class SuperheroList extends StatefulWidget {
   final List<SuperHero> superheroList;
+  final String searchTerm;
+  final Function(String) onSearchChanged;
 
   const SuperheroList({
     Key? key,
     required this.superheroList,
+    required this.searchTerm,
+    required this.onSearchChanged,
   }) : super(key: key);
 
   @override
@@ -16,23 +20,15 @@ class SuperheroList extends StatefulWidget {
 }
 
 class _SuperheroListState extends State<SuperheroList> {
-  String _searchText = '';
   List<SuperHero> _filteredSuperheroes = [];
 
   @override
-  void initState() {
-    super.initState();
-    _filteredSuperheroes = widget.superheroList;
-  }
-
-  void _filterSuperheroes(String text) {
-    setState(() {
-      _searchText = text;
-      _filteredSuperheroes = widget.superheroList
-          .where((hero) =>
-              hero.name.toLowerCase().contains(_searchText.toLowerCase()))
-          .toList();
-    });
+  void didUpdateWidget(covariant SuperheroList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _filteredSuperheroes = widget.superheroList
+        .where((hero) =>
+            hero.name.toLowerCase().contains(widget.searchTerm.toLowerCase()))
+        .toList();
   }
 
   @override
@@ -40,9 +36,7 @@ class _SuperheroListState extends State<SuperheroList> {
     return Column(
       children: [
         CustomSearchBar(
-          onChanged: (value) {
-            _filterSuperheroes(value);
-          },
+          onChanged: widget.onSearchChanged,
           onSubmitted: (value) {},
           hintText: "Escribe aquí el nombre del superhéroe...",
         ),

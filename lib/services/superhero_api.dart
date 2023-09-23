@@ -7,22 +7,11 @@ class SuperheroApi {
 
   final client = http.Client();
 
-  Future<List<SuperHero>> getAllSuperheroes({int? limit, int? offset}) async {
+  Future<List<SuperHero>> getAllSuperheroes() async {
     final response = await client.get(Uri.parse('$baseUrl/all.json'));
 
     if (response.statusCode == 200) {
       List<dynamic> superheroList = json.decode(response.body);
-
-      // Si se proporciona un offset, salta esa cantidad de registros
-      if (offset != null && offset < superheroList.length) {
-        superheroList = superheroList.skip(offset).toList();
-      }
-
-      // Si se proporciona un límite, toma solo esa cantidad de registros
-      if (limit != null && limit < superheroList.length) {
-        superheroList = superheroList.take(limit).toList();
-      }
-
       return superheroList.map((json) => SuperHero.fromJson(json)).toList();
     } else {
       throw Exception('Error al obtener la lista de superhéroes');

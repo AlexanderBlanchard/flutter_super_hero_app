@@ -12,27 +12,94 @@ class SuperheroesPage extends StatefulWidget {
 }
 
 class _SuperheroesPageState extends State<SuperheroesPage> {
-  late List<SuperHero> superheroes;
+  List<SuperHero> superheroes = [];
+  List<SuperHero> filteredSuperheroes = [];
+
+  String _searchText = '';
+  int _currentPage = 1;
+  final int _itemsPerPage = 20;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSuperheroes();
+  }
+
+  _loadSuperheroes() async {
+    superheroes = await SuperheroApi().getAllSuperheroes();
+    setState(() {
+      _currentPage = 1;
+      _updateFilteredSuperheroes();
+    });
+  }
+
+  _filterSuperheroes(String text) {
+    setState(() {
+      _searchText = text;
+      _currentPage = 1;
+      _updateFilteredSuperheroes();
+    });
+  }
+
+  _updateFilteredSuperheroes() {
+    if (superheroes == null) return;
+
+    filteredSuperheroes = superheroes!
+        .where((hero) =>
+            _searchText.isEmpty ||
+            hero.name.toLowerCase().contains(_searchText.toLowerCase()))
+        .skip((_currentPage - 1) * _itemsPerPage)
+        .take(_itemsPerPage)
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Superheroes")),
-      body: FutureBuilder(
-        future: SuperheroApi().getAllSuperheroes(limit: 15),
-        builder: (context, AsyncSnapshot<List<SuperHero>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(child: Text("Error: ${snapshot.error}"));
-            }
-            superheroes = snapshot.data!;
-            return SuperheroList(superheroList: superheroes);
-          } else {
-            return const LoadingItem(
-              message: "Cargando superhéroes...",
-            );
-          }
-        },
+      body: Column(
+        children: [
+          Expanded(
+            child: superheroes == null
+                ? const LoadingItem(message: "Cargando superhéroes...")
+                : SuperheroList(
+                    superheroList: filteredSuperheroes!,
+                    searchTerm: _searchText,
+                    onSearchChanged: _filterSuperheroes,
+                  ),
+          ),
+          // Botones de navegación
+          SizedBox(height: 10.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                onPressed: _currentPage == 1
+                    ? null
+                    : () {
+                        setState(() {
+                          _currentPage--;
+                          _updateFilteredSuperheroes();
+                        });
+                      },
+                child: Text("Anterior"),
+              ),
+              Text("Página $_currentPage"),
+              ElevatedButton(
+                onPressed: (filteredSuperheroes == null ||
+                        filteredSuperheroes!.length < _itemsPerPage)
+                    ? null
+                    : () {
+                        setState(() {
+                          _currentPage++;
+                          _updateFilteredSuperheroes();
+                        });
+                      },
+                child: Text("Siguiente"),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
