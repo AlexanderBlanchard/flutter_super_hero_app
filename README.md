@@ -1,16 +1,25 @@
-# app_superheroes
+# App Superheroes 🦸‍♂️🦸‍♀️
 
-A new Flutter project.
+Una aplicación Flutter que muestra información detallada sobre diversos superhéroes.
 
-## Getting Started
+## Características
 
-This project is a starting point for a Flutter application.
+- Lista de superhéroes con imágenes y nombres.
+- Detalles del superhéroe incluyendo estadísticas, apariencia, biografía, trabajo y conexiones.
+- Imágenes de superhéroes con efecto de carga progresiva.
 
-A few resources to get you started if this is your first Flutter project:
+## Tecnologías Utilizadas
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Cómo Empezar 🚀
+
+### Prerrequisitos
+
+- Asegúrate de tener instalado Flutter en tu máquina, [sigue estas instrucciones](https://flutter.dev/docs/get-started/install).
+
+### Instalación
+
+1. Clona este repositorio:
+```bash
+git clone https://github.com/AlexanderBlanchard/flutter_super_hero_app.git
