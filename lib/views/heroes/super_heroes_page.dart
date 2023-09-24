@@ -1,5 +1,6 @@
 import 'package:app_superheroes/models/superhero.dart';
 import 'package:app_superheroes/services/superhero_api.dart';
+import 'package:app_superheroes/views/heroes/about_it.dart';
 import 'package:app_superheroes/views/heroes/components/super_hero_list.dart';
 import 'package:app_superheroes/widgets/loading_item.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,20 @@ class _SuperheroesPageState extends State<SuperheroesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Superheroes")),
+      appBar: AppBar(
+        title: Text("Superheroes"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AcercaDeScreen()),
+              );
+            },
+          )
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
